@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jake Merten | Software Engineer</title>
+  <style>
+    :root {
+      --bg-color: #1a1a1a;
+      --text-color: #f9f9f9;
+      --card-bg: #2a2a2a;
+    }
+    body.light {
+      --bg-color: #f9f9f9;
+      --text-color: #333;
+      --card-bg: white;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    header {
+      background: var(--card-bg);
+      color: var(--text-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+    header nav a {
+      color: var(--text-color);
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+    .toggle-btn {
+      background: none;
+      border: 1px solid var(--text-color);
+      color: var(--text-color);
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    section {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .portfolio-item {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .portfolio-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .portfolio-item .content {
+      padding: 1rem;
+    }
+    .blog-posts {
+      display: grid;
+      gap: 1rem;
+    }
+    .blog-post {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+    input, textarea {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.75rem;
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jake Merten</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="toggle-btn" id="toggle-theme">Light Mode</button>
+  </header>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>Hello! I’m Jake, a software engineer passionate about creating clean, efficient, and user-friendly applications. I have experience in full-stack development, data analytics, and cloud solutions. When I’m not coding, you’ll find me running, hiking, or exploring new tech trends.</p>
+  </section>
+
+  <section id="portfolio">
+    <h2>Portfolio</h2>
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <img src="https://via.placeholder.com/300x150" alt="Project 1">
+        <div class="content">
+          <h3>Project One</h3>
+          <p>A short description of the project goes here.</p>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://via.placeholder.com/300x150" alt="Project 2">
+        <div class="content">
+          <h3>Project Two</h3>
+          <p>A short description of the project goes here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog">
+    <h2>Latest Blog Posts</h2>
+    <div class="blog-posts" id="blog-posts">
+      <p>Loading Medium articles...</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <form action="https://formspree.io/f/your-form-id" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <script>
+    // Theme Toggle
+    const toggleBtn = document.getElementById('toggle-theme');
+    document.body.classList.remove('light'); // Default to dark mode
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+      toggleBtn.textContent = document.body.classList.contains('light') ? 'Dark Mode' : 'Light Mode';
+    });
+
+    // Medium Articles Fetch
+    const mediumRSS = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@yourusername';
+    fetch(mediumRSS)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('blog-posts');
+        container.innerHTML = '';
+        data.items.slice(0, 3).forEach(post => {
+          const div = document.createElement('div');
+          div.className = 'blog-post';
+          div.innerHTML = `
+            <h3><a href="${post.link}" target="_blank" style="color: var(--text-color)">${post.title}</a></h3>
+            <p>${post.pubDate.split(' ')[0]}</p>
+            <p>${post.description.replace(/<[^>]+>/g, '').slice(0, 150)}...</p>
+          `;
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        document.getElementById('blog-posts').innerHTML = '<p>Could not load Medium articles.</p>';
+      });
+  </script>
+</body>
+</html>
