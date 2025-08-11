@@ -1,197 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jake Merten | Software Engineer</title>
-  <style>
-    :root {
-      --bg-color: #1a1a1a;
-      --text-color: #f9f9f9;
-      --card-bg: #2a2a2a;
-    }
-    body.light {
-      --bg-color: #f9f9f9;
-      --text-color: #333;
-      --card-bg: white;
-    }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
-    }
-    header {
-      background: var(--card-bg);
-      color: var(--text-color);
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1000;
-    }
-    header nav a {
-      color: var(--text-color);
-      margin-left: 1rem;
-      text-decoration: none;
-    }
-    .toggle-btn {
-      background: none;
-      border: 1px solid var(--text-color);
-      color: var(--text-color);
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    section {
-      max-width: 900px;
-      margin: auto;
-      padding: 2rem;
-    }
-    h2 {
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-    .portfolio-item {
-      background: var(--card-bg);
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    .portfolio-item img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
-    .portfolio-item .content {
-      padding: 1rem;
-    }
-    .blog-posts {
-      display: grid;
-      gap: 1rem;
-    }
-    .blog-post {
-      background: var(--card-bg);
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    form {
-      display: grid;
-      gap: 1rem;
-    }
-    input, textarea {
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    button {
-      padding: 0.75rem;
-      background: var(--card-bg);
-      color: var(--text-color);
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      opacity: 0.8;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jake Merten | Software Engineer Portfolio</title>
+  <meta name="description" content="Portfolio of Jake Merten — software engineer building fast, accessible web apps. Projects, about, and latest writing from Medium." />
+  <link rel="canonical" href="https://your-domain.example/" />
+
+  <!-- Social -->
+  <meta property="og:title" content="Jake Merten | Software Engineer" />
+  <meta property="og:description" content="Projects, background, and latest writing from Medium." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://your-domain.example/" />
+  <meta property="og:image" content="https://your-domain.example/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts (fast + modern: system stack) -->
+  <style>html{font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif;}</style>
+  <link rel="preconnect" href="https://api.rss2json.com" crossorigin>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jake Merten",
+    "jobTitle": "Software Engineer",
+    "url": "https://your-domain.example/",
+    "sameAs": [
+      "https://medium.com/@jakemer10",
+      "https://github.com/jakemerten"
+    ]
+  }
+  </script>
 </head>
 <body>
-  <header>
-    <h1>Jake Merten</h1>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#portfolio">Portfolio</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact">Contact</a>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="#top" aria-label="Jake Merten home">JM</a>
+      <button id="theme-toggle" class="icon-button" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#blog">Blog</a></li>
+      </ul>
     </nav>
-    <button class="toggle-btn" id="toggle-theme">Light Mode</button>
   </header>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p>Hello! I’m Jake, a software engineer passionate about creating clean, efficient, and user-friendly applications. I have experience in full-stack development, data analytics, and cloud solutions. When I’m not coding, you’ll find me running, hiking, or exploring new tech trends.</p>
-  </section>
+  <main id="top">
+    <!-- Hero / About -->
+    <section id="about" class="section fade-in">
+      <div class="container">
+        <h1>Hi, I’m <span class="accent">Jake Merten</span>.</h1>
+        <p class="lede">I build fast, accessible web apps with modern JavaScript and a pragmatic approach to shipping.</p>
+        <ul class="badges">
+          <li>Full‑Stack JS</li>
+          <li>Python & Data</li>
+          <li>Cloud & CI/CD</li>
+        </ul>
+      </div>
+    </section>
 
-  <section id="portfolio">
-    <h2>Portfolio</h2>
-    <div class="portfolio-grid">
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/300x150" alt="Project 1">
-        <div class="content">
-          <h3>Project One</h3>
-          <p>A short description of the project goes here.</p>
+    <!-- Portfolio -->
+    <section id="portfolio" class="section fade-in">
+      <div class="container">
+        <h2>Selected Work</h2>
+        <div class="grid">
+          <article class="card">
+            <img loading="lazy" src="project1.jpg" alt="Screenshot of Project One" width="640" height="360" />
+            <div class="card-body">
+              <h3>Project One</h3>
+              <p>Short summary of what you built, impact, and tech used.</p>
+              <div class="actions">
+                <a class="button" href="#" target="_blank" rel="noopener">Live</a>
+                <a class="button ghost" href="#" target="_blank" rel="noopener">Code</a>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <img loading="lazy" src="project2.jpg" alt="Screenshot of Project Two" width="640" height="360" />
+            <div class="card-body">
+              <h3>Project Two</h3>
+              <p>One‑liner on problem → solution → result. Keep it crisp.</p>
+              <div class="actions">
+                <a class="button" href="#" target="_blank" rel="noopener">Live</a>
+                <a class="button ghost" href="#" target="_blank" rel="noopener">Code</a>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/300x150" alt="Project 2">
-        <div class="content">
-          <h3>Project Two</h3>
-          <p>A short description of the project goes here.</p>
+    </section>
+
+    <!-- Blog (Medium auto) -->
+    <section id="blog" class="section fade-in">
+      <div class="container">
+        <h2>Latest Writing</h2>
+        <div id="blog-posts" class="posts">
+          <p class="muted">Loading Medium articles…</p>
         </div>
       </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container small">
+      <p>© <span id="year"></span> Jake Merten • Built with HTML, CSS & JS</p>
     </div>
-  </section>
+  </footer>
 
-  <section id="blog">
-    <h2>Latest Blog Posts</h2>
-    <div class="blog-posts" id="blog-posts">
-      <p>Loading Medium articles...</p>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Contact Me</h2>
-    <form action="https://formspree.io/f/your-form-id" method="POST">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email" required>
-      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-      <button type="submit">Send</button>
-    </form>
-  </section>
-
-  <script>
-    // Theme Toggle
-    const toggleBtn = document.getElementById('toggle-theme');
-    document.body.classList.remove('light'); // Default to dark mode
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light');
-      toggleBtn.textContent = document.body.classList.contains('light') ? 'Dark Mode' : 'Light Mode';
-    });
-
-    // Medium Articles Fetch
-    const mediumRSS = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@yourusername';
-    fetch(mediumRSS)
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById('blog-posts');
-        container.innerHTML = '';
-        data.items.slice(0, 3).forEach(post => {
-          const div = document.createElement('div');
-          div.className = 'blog-post';
-          div.innerHTML = `
-            <h3><a href="${post.link}" target="_blank" style="color: var(--text-color)">${post.title}</a></h3>
-            <p>${post.pubDate.split(' ')[0]}</p>
-            <p>${post.description.replace(/<[^>]+>/g, '').slice(0, 150)}...</p>
-          `;
-          container.appendChild(div);
-        });
-      })
-      .catch(err => {
-        document.getElementById('blog-posts').innerHTML = '<p>Could not load Medium articles.</p>';
-      });
-  </script>
+  <script src="script.js" defer></script>
 </body>
 </html>
