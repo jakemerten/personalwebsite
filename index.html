@@ -74,7 +74,7 @@
             <button id="theme-toggle" aria-label="Toggle theme" class="p-2 ml-4 text-gray-700 dark:text-text-dark bg-gray-100 dark:bg-secondary-dark rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 shadow-md">
                 <!-- Moon icon (default in dark mode) -->
                 <svg id="moon-icon" class="theme-icon w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9 9.003 0 008.354-5.646z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9 9.003 9.003 0 008.354-5.646z" />
                 </svg>
                 <!-- Sun icon (default in light mode) -->
                 <svg id="sun-icon" class="theme-icon w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -201,8 +201,8 @@
         
         // Define the constant for the feature tag
         const FEATURE_TAG = 'portfolio-feature'; 
-        // Define the constant for the custom title prefix
-        const TITLE_PREFIX = 'title:';
+        // Define the constant for the custom title prefix (NOW GITHUB COMPLIANT)
+        const TITLE_PREFIX = 'proj-title-'; // Must start with lowercase letter/number and use no special characters
 
         // --- Theme Toggle Logic (Existing) ---
         
@@ -245,12 +245,12 @@
                 let newTheme;
                 if (htmlElement.classList.contains('dark')) {
                     htmlElement.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                    newTheme = 'light';
-                } else {
-                    htmlElement.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
                     newTheme = 'dark';
+                } else {
+                    htmlElement.classList.add('dark');
+                    localStorage.setItem('theme', 'light');
+                    newTheme = 'light';
                 }
                 updateIcons(newTheme);
                 activeIcon.classList.remove('rotated'); // Remove class after transition
@@ -359,7 +359,7 @@
                 .join(' ');
         }
 
-        // --- GitHub Integration Logic (Updated for Multi-Tag Filtering and Dynamic Title) ---
+        // --- GitHub Integration Logic (Updated for GitHub Compliance) ---
 
         /**
          * Fetches GitHub repositories and filters them by the 'portfolio-feature' topic tag.
@@ -440,13 +440,24 @@
             
             // 3. Render Project Cards
             projects.forEach(project => {
+                
                 // --- CUSTOM TITLE LOGIC ---
+                // GitHub topics MUST be lowercase and use hyphens (e.g., 'proj-title-my-app-name')
+                // This logic converts it to a clean, readable title (e.g., 'My App Name').
                 let displayTitle = formatProjectTitle(project.name); // Default to formatted name
                 let customTitleTopic = project.topics.find(t => t.startsWith(TITLE_PREFIX));
 
                 if (customTitleTopic) {
-                    // If a custom title is found, use the text after the prefix and trim spaces
-                    displayTitle = customTitleTopic.substring(TITLE_PREFIX.length).trim();
+                    // 1. Get the raw, hyphenated title text (e.g., "my-app-name")
+                    let rawTitle = customTitleTopic.substring(TITLE_PREFIX.length).trim();
+                    
+                    // 2. Replace hyphens with spaces (e.g., "my app name")
+                    let spacedTitle = rawTitle.replace(/-/g, ' '); 
+                    
+                    // 3. Capitalize the first letter of each word for clean display
+                    displayTitle = spacedTitle.split(' ')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                        .join(' ');
                 }
                 // --- END CUSTOM TITLE LOGIC ---
 
@@ -471,7 +482,7 @@
                     <a href="${project.html_url}" target="_blank" rel="noopener noreferrer" class="group block">
                         <!-- Use the dynamically determined title -->
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-text-light group-hover:text-accent mb-2">${displayTitle}</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">${project.description || 'No description provided.'}</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">${project.description || 'No description provided in GitHub.'}</p>
                         <div class="flex flex-wrap items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
                             <!-- Language/Topic tags -->
                             ${topicChips}
@@ -511,14 +522,10 @@
         // --- Initialization ---
 
         window.onload = () => {
-            // Run initial theme check
             initTheme();
-            // Fetch posts when the page loads
-            fetchMediumPosts();
-            // Fetch projects when the page loads
-            fetchGitHubProjects();
+            fetchGitHubProjects(); // Load projects first
+            fetchMediumPosts();   // Load posts second
         };
-
     </script>
 </body>
 </html>
