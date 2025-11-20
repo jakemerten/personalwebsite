@@ -219,18 +219,20 @@
         currentYearSpan.textContent = new Date().getFullYear();
 
         // 1. Initial Load: Check localStorage for theme preference
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            // Check if theme is explicitly set to light or if no theme is set and the user prefers light
-            if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-                htmlElement.classList.remove('dark');
-                updateIcons('light');
-            } else {
-                // Default or saved theme is dark
-                htmlElement.classList.add('dark');
-                updateIcons('dark');
-            }
-        }
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    
+    // Check ONLY if the user explicitly saved 'light'
+    if (savedTheme === 'light') {
+        // Apply light theme
+        htmlElement.classList.remove('dark');
+        updateIcons('light');
+    } else {
+        // If savedTheme is 'dark' OR if there is NO savedTheme, apply dark theme.
+        htmlElement.classList.add('dark');
+        updateIcons('dark');
+    }
+}
 
         // 2. Icon Switching Logic
         function updateIcons(theme) {
