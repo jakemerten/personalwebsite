@@ -222,16 +222,18 @@
         // 1. Initial Load: Check localStorage for theme preference
 function initTheme() {
     const savedTheme = localStorage.getItem('theme');
-    
-    // Check ONLY if the user explicitly saved 'light'
-    if (savedTheme === 'light') {
-        // Apply light theme
-        htmlElement.classList.remove('dark');
-        updateIcons('light');
-    } else {
-        // If savedTheme is 'dark' OR if there is NO savedTheme, apply dark theme.
+    // Check if system prefers dark mode
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Logic: 
+    // 1. If user previously chose a theme, use that.
+    // 2. Otherwise, use the system preference.
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
         htmlElement.classList.add('dark');
         updateIcons('dark');
+    } else {
+        htmlElement.classList.remove('dark');
+        updateIcons('light');
     }
 }
 
@@ -246,28 +248,67 @@ function initTheme() {
             }
         }
 
-        // 3. Toggle Functionality
-        function toggleTheme() {
-            // Apply rotation animation to the currently visible icon
-            const activeIcon = htmlElement.classList.contains('dark') ? moonIcon : sunIcon;
-            activeIcon.classList.add('rotated');
-            
-            // Wait for a short duration before actually toggling the theme and removing the class
-            setTimeout(() => {
-                let newTheme;
-                if (htmlElement.classList.contains('dark')) {
-                    htmlElement.classList.remove('dark');
-                    localStorage.setItem('theme', 'dark');
-                    newTheme = 'dark';
-                } else {
-                    htmlElement.classList.add('dark');
-                    localStorage.setItem('theme', 'light');
-                    newTheme = 'light';
-                }
-                updateIcons(newTheme);
-                activeIcon.classList.remove('rotated'); // Remove class after transition
-            }, 300); // Match transition duration
+// --- Integrated Theme Logic (System + Manual Toggle) ---
+
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // 1. Check for manual override first, then system preference
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        htmlElement.classList.add('dark');
+        updateIcons('dark');
+    } else {
+        htmlElement.classList.remove('dark');
+        updateIcons('light');
+    }
+}
+
+function updateIcons(theme) {
+    if (theme === 'dark') {
+        moonIcon.classList.remove('hidden');
+        sunIcon.classList.add('hidden');
+    } else {
+        moonIcon.classList.add('hidden');
+        sunIcon.classList.remove('hidden');
+    }
+}
+
+function toggleTheme() {
+    const activeIcon = htmlElement.classList.contains('dark') ? moonIcon : sunIcon;
+    activeIcon.classList.add('rotated');
+    
+    setTimeout(() => {
+        let newTheme;
+        // If it's currently dark, switch to light
+        if (htmlElement.classList.contains('dark')) {
+            htmlElement.classList.remove('dark');
+            newTheme = 'light';
+        } else {
+            // If it's currently light, switch to dark
+            htmlElement.classList.add('dark');
+            newTheme = 'dark';
         }
+        localStorage.setItem('theme', newTheme);
+        updateIcons(newTheme);
+        activeIcon.classList.remove('rotated');
+    }, 300);
+}
+
+// 2. LISTEN FOR SYSTEM CHANGES
+// This allows the site to change live if the user switches OS themes, 
+// but ONLY if they haven't manually toggled a preference on your site yet.
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+        const newSystemTheme = e.matches ? 'dark' : 'light';
+        if (newSystemTheme === 'dark') {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+        updateIcons(newSystemTheme);
+    }
+});
 
         // Event Listener
         themeToggle.addEventListener('click', toggleTheme);
